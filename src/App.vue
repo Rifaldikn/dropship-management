@@ -1,28 +1,46 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div>
+    <!-- <v-main> -->
+    <v-fade-transition>
+      <router-view />
+    </v-fade-transition>
+
+    <!-- </v-main> -->
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-
 export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+  name: "App",
+  created() {
+    this.$store.dispatch("fetchCustomerList");
+    this.$store.dispatch("fetchSupplierList");
+    this.$store.dispatch("fetchOrdersProduct");
+    this.$store.dispatch("fetchProductListItems");
+  },
+};
 </script>
 
-<style>
+<style >
+body {
+  max-width: 600px !important;
+  margin: 0 auto;
+}
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  background-color: #f9f8f7;
+}
+
+.v-text-field--outlined >>> fieldset {
+  border-color: #b9bcff !important;
+}
+
+* {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 </style>

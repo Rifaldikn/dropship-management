@@ -1,0 +1,6 @@
+{
+  "appId": "com.dropvue.com",
+  "appName": "vuetify-dropship",
+  "webDir": "dist",
+  "bundledWebRuntime": false
+}
