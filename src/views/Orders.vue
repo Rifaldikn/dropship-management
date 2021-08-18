@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container class="pa-5">
     <v-row class="my-0">
       <!-- <v-col cols="12" class="pb-0"> -->
       <v-col cols="10">
@@ -15,6 +15,7 @@
           single-line
           flat
           outlined
+          v-model="searchBar"
         >
         </v-text-field>
       </v-col>
@@ -23,7 +24,7 @@
           small
           to="/orders/add"
           color="primary"
-          class="elevation-0 rounded-lg"
+          class="elevation-5 rounded-lg"
           height="40px"
         >
           <v-icon> mdi-account-plus-outline </v-icon>
@@ -33,23 +34,16 @@
     </v-row>
 
     <!-- Status Slider -->
-    <v-slide-group
-      mandatory
-      v-model="productFilterBy"
-      value="status"
-      class="py-2"
-    >
+    <v-slide-group v-model="productFilterBy" value="status" class="py-2">
       <v-slide-item
-        v-for="status in orderStatusMenu"
-        :key="status"
+        v-for="(status, index) in orderStatusMenu"
+        :key="index"
         v-slot="{ active, toggle }"
       >
         <v-btn
-          class="mx-2 catpion text-capitalize rounded-lg"
+          class="mx-2 catpion text-capitalize rounded-lg white"
           :input-value="active"
           active-class="primary white--text"
-          :color="active ? 'undefined' : '#8c9eff'"
-          outlined
           depressed
           rounded
           small
@@ -62,7 +56,7 @@
 
     <!-- OrderList -->
     <v-fade-transition>
-      <order-list :filter="orderStatusMenu[productFilterBy]" />
+      <order-list :filter="getStatusFilter" :searchBar="searchBar" />
     </v-fade-transition>
   </v-container>
 </template>
@@ -72,19 +66,42 @@
 import orderList from "./components/OrderList.vue";
 
 export default {
-  name: "OrderList",
+  name: "OrdersPage",
   components: { orderList },
+  props: ["filter"],
   data() {
     return {
+      searchBar: "",
       orderStatusMenu: [
         "All",
         "To Order",
-        "Awaiting Shipment",
+        "Packing",
+        "Shipping",
         "Done",
         "Canceled",
       ],
-      productFilterBy: "",
+      productFilterBy: null,
     };
+  },
+  computed: {
+    getStatusFilter() {
+      let statusFilter = "All";
+      if (this.filter && this.productFilterBy == null) {
+        statusFilter = this.filter;
+      } else if (
+        (!this.filter || this.productFilterBy) &&
+        this.productFilterBy != null
+      ) {
+        statusFilter = this.orderStatusMenu[this.productFilterBy];
+      }
+      return statusFilter;
+    },
   },
 };
 </script>
+
+<style scoped>
+.v-text-field--outlined >>> fieldset {
+  border-color: #b9bcff !important;
+}
+</style>

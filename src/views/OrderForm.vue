@@ -1,7 +1,7 @@
 <template>
   <v-container>
-    <v-row class="pa-3">
-      <v-card class="px-5 py-5 my-3 rounded-lg" id="mainCard" outlined>
+    <v-row class="pa-5">
+      <v-card class="px-5 py-5 my-3 rounded-lg" id="mainCard" flat>
         <v-row>
           <v-col cols="auto" class="px-0 pb-0">
             <v-card-text class="py-0 primary--text font-weight-bold subtitle-1">
@@ -180,7 +180,7 @@
       id="checkoutSheet"
       height="auto"
       flat
-      class="px-0 rounded-lg"
+      class="px-0 py-2 rounded-lg"
       outlined
       width="94%"
     >
@@ -191,9 +191,9 @@
           >
           <v-card-title
             primary-title
-            class="primary--text font-weight-bold py-0"
+            class="primary--text font-weight-medium py-0"
           >
-            Rp {{ getTotalOrderPrice | currency }}
+            Rp {{ getTotalOrderPrice.totalPrice | currency }}
           </v-card-title>
         </v-col>
         <v-col class="d-flex align-center justify-space-around pr-0">
@@ -261,13 +261,21 @@ export default {
     getTotalOrderPrice() {
       let productList = this.orderForm.data.products.value;
       let totalPrice = 0;
+      let totalCost = 0;
       if (productList.length > 0) {
         totalPrice = productList
           .map((item) => item.totalPrice)
           .reduce((prev, curr) => prev + curr, 0);
-        return totalPrice;
+
+        totalCost = productList
+          .map((item) => item.supplier_price)
+          .reduce((prev, curr) => prev + curr, 0);
+
+        console.log(totalCost);
+
+        return { totalPrice, totalCost };
       }
-      return totalPrice;
+      return { totalPrice, totalCost };
     },
     getProductCount() {
       let productList = this.orderForm.data.products.value;
@@ -279,9 +287,12 @@ export default {
   methods: {
     saveOrder() {
       let orderData = this.orderForm.data;
+      const { totalPrice, totalCost } = this.getTotalOrderPrice;
+
       orderData.id = this.orderForm.id;
-      orderData.totalPrice = this.getTotalOrderPrice;
-      console.log(orderData);
+      orderData.totalPrice = totalPrice;
+      orderData.totalCost = totalCost;
+      orderData.totalProductCount = this.getProductCount;
 
       this.$store.dispatch("addNewOrder", orderData);
 
@@ -324,25 +335,25 @@ export default {
       let productCart = this.orderForm.data.products.value;
 
       let productAdded = {
-        id: product.id,
-        price: product.price,
-        name: product.name,
-        img: product.img || "",
+        ...product,
         count: 0,
       };
 
-      // const findProduct = productCart.find((item) => item.id == product.id);
       let findProduct = productCart.findIndex((item) => item.id == product.id);
 
       if (findProduct == -1) {
         productAdded.count = +1;
         productAdded.totalPrice = productAdded.price;
+        productAdded.totalCost = productAdded.supplier_price;
         productCart.push(productAdded);
       } else {
         console.log("add more");
         productCart[findProduct].count += 1;
         productCart[findProduct].totalPrice =
           productCart[findProduct].count * productAdded.price;
+
+        productCart[findProduct].totalCost =
+          productCart[findProduct].count * productAdded.supplier_price;
       }
     },
   },

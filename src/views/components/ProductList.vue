@@ -1,15 +1,15 @@
 <template>
-  <v-container>
+  <div>
     <v-row class="my-0">
       <v-col
         cols="12"
-        v-for="(product, index) in productList"
+        v-for="(product, index) in filteredProducts"
         :key="index"
-        class="pa-0 mb-2"
+        class="pa-0"
       >
         <v-card
-          class="rounded-lg px-0"
-          outlined
+          class="rounded-lg px-0 my-3"
+          flat
           :to="'/products/' + product.id"
           v-my-touch:touchhold="confirmDelete(product)"
         >
@@ -20,7 +20,7 @@
             class="px-3 d-flex align-center caption grey--text text--darken-2"
             v-if="product.supplier_name"
           >
-            <v-col cols="auto" class="pt-5">
+            <v-col cols="auto">
               <!-- Store Name -->
               <v-card-actions name="productDetial" class="pa-0">
                 <span>{{ product.supplier_name }}</span>
@@ -98,29 +98,23 @@
         </v-card>
       </v-col>
 
+      <v-col
+        v-if="productList.length == 0"
+        class="d-flex justify-center"
+        style="position: fixed; top: 50%"
+      >
+        <v-card-title class="grey--text">
+          No Product, Please Create One
+        </v-card-title>
+      </v-col>
       <delete-modal
         :dialog="isDeleteAction"
         :deleteItem="selectedProduct"
         @cancel="cancelDelete"
         @activeDeleteItem="deleteProduct($event)"
       />
-
-      <v-col
-        v-if="productList.length == 0"
-        style="
-          position: fixed;
-          top: 50%;
-          display: flex;
-          justify-content: center;
-          text-align: center;
-        "
-      >
-        <v-card-title class="grey--text">
-          No Product, Please Create One
-        </v-card-title>
-      </v-col>
     </v-row>
-  </v-container>
+  </div>
 </template>
 
 <script>
@@ -130,6 +124,7 @@ import { mapGetters } from "vuex";
 export default {
   name: "ProductList",
   components: { deleteModal },
+  props: ["searchBar"],
   data() {
     return {
       isDeleteAction: false,
@@ -140,6 +135,17 @@ export default {
   },
   computed: {
     ...mapGetters(["productList"]),
+    filteredProducts() {
+      if (this.searchBar) {
+        return this.productList.filter((product) => {
+          const searchToLowerCase = this.searchBar.toLowerCase();
+          const itemToLowerCase = product.name.toLowerCase();
+          return itemToLowerCase.includes(searchToLowerCase);
+        });
+      } else {
+        return this.productList;
+      }
+    },
   },
   methods: {
     confirmDelete(product) {
@@ -150,6 +156,7 @@ export default {
         this.selectedProduct = Object.assign({}, product);
       };
     },
+
     cancelDelete() {
       this.isDeleteAction = false;
     },

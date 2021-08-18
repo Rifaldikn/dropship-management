@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container class="pa-5">
     <!-- Image Input -->
     <v-container>
       <v-row class="">
@@ -46,9 +46,9 @@
 
     <v-card
       class="px-5 py-5 my-3 rounded-lg"
-      outlined
       v-for="(form, index) in productForm"
       :key="index"
+      flat
     >
       <v-row>
         <v-col cols="auto" class="px-0 pb-0">
@@ -109,7 +109,7 @@
               v-else-if="itemForm.type == 'combobox'"
               class="elevation-0"
               color="accent"
-              :items="supplierList"
+              :items="getAllSupplierList"
               item-text="name"
               item-value="id"
               v-model="itemForm.value"
@@ -171,7 +171,6 @@
 </template>
 
 <script>
-// import { mapGetters } from "vuex";
 export default {
   name: "AddProduct",
   data() {
@@ -179,7 +178,6 @@ export default {
       isEdited: false,
       isSaveButton: true,
       caption: "",
-      supplierList: [],
       img1: "",
       imageData: null,
       rules: {
@@ -245,7 +243,11 @@ export default {
       },
     };
   },
-  computed: {},
+  computed: {
+    getAllSupplierList() {
+      return this.$store.getters.allSuppliers;
+    },
+  },
 
   methods: {
     getEdited() {
@@ -257,17 +259,12 @@ export default {
         this.isEdited = false;
       }
     },
+
     editedButton() {
       this.isSaveButton = !this.isSaveButton;
       this.isEdited = !this.isEdited;
     },
-    saveButtonAction() {
-      const routerName = this.$route.name;
 
-      if (routerName.includes("Supplier")) {
-        this.saveSupplierData();
-      }
-    },
     getFormValue() {
       const routerName = this.$route.name;
 
@@ -296,9 +293,6 @@ export default {
 
         this.img1 = selectedProducts.img;
       }
-    },
-    fetchSupplierList() {
-      this.supplierList = this.$store.getters.allSuppliers;
     },
     previewImage(event) {
       this.uploadValue = 0;
@@ -356,6 +350,10 @@ export default {
           });
       }
     },
+  },
+  created() {
+    this.getEdited()
+    this.getFormValue();
   },
 };
 </script>

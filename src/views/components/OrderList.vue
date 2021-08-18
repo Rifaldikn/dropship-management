@@ -3,9 +3,8 @@
     <v-col>
       <div>
         <v-card
-          class="pa-2 elevation-0 rounded-lg mb-2"
-          outlined
-          v-for="order in filterOrdersByStatus"
+          class="pa-3 elevation-0 rounded-lg my-3"
+          v-for="order in filteredOrder"
           :key="order.id"
           :to="'/orders/' + order.id"
         >
@@ -15,11 +14,11 @@
                 <v-icon dark small> mdi-account </v-icon>
               </v-avatar>
             </v-col>
-            <v-col class="font-weight-bold primary--text">
-              {{ order.customerName }}
+            <v-col class="font-weight-medium primary--text">
+              {{ order.customer.name }}
             </v-col>
             <v-col class="d-flex justify-end grey--text text--darken-2">
-              {{ order.updatedAt | dateFormat }}
+              {{ order.updatedAt | formatDate }}
             </v-col>
             <v-col cols="12" class="py-0">
               <v-divider></v-divider>
@@ -39,7 +38,7 @@
             <v-col class="caption">
               <v-row>
                 <v-col cols="12" class="pb-0">
-                  <p class="font-weight-medium mb-0">
+                  <p class="font-weight-medium grey--text text--darken-2 mb-0">
                     {{ order.products[0].name }}
                   </p>
                 </v-col>
@@ -47,15 +46,17 @@
 
               <v-row>
                 <v-col class="grey--text py-0">No. Pesanan </v-col>
-                <v-col class="font-weight-bold d-flex justify-end py-0">
+                <v-col class="font-weight-medium d-flex justify-end py-0">
                   {{ order.id }}
                 </v-col>
               </v-row>
 
               <v-row>
-                <v-col class="grey--text pt-0"> Products (1)</v-col>
+                <v-col class="grey--text pt-0">
+                  Products ({{ order.products.length }})</v-col
+                >
                 <v-col
-                  class="d-flex justify-end font-weight-bold pt-0 primary--text"
+                  class="d-flex justify-end font-weight-medium pt-0 primary--text"
                 >
                   Rp. {{ order.totalPrice | currency }}
                 </v-col>
@@ -74,28 +75,36 @@
 </template>
 
 <script>
-import moment from "moment";
 import { mapGetters } from "vuex";
-
 export default {
   name: "OrderList",
-  props: ["filter"],
+  props: ["filter", "searchBar"],
+  data() {
+    return {
+      isDeleteAction: false,
+    };
+  },
   computed: {
     ...mapGetters(["allOrders"]),
-    filterOrdersByStatus() {
-      if (this.filter == "All") {
-        return this.allOrders;
-      } else {
+
+    filteredOrder() {
+      if (this.searchBar) {
         return this.allOrders.filter((order) => {
-          return order.status == this.filter;
+          const searchToLowerCase = this.searchBar.toLowerCase();
+          const itemToLowerCase = order.customer.name.toLowerCase();
+          return itemToLowerCase.includes(searchToLowerCase);
         });
+      } else {
+        if (this.filter == "All") {
+          return this.allOrders;
+        } else {
+          return this.allOrders.filter((order) => {
+            return order.status == this.filter;
+          });
+        }
       }
     },
   },
-  filters: {
-    dateFormat(date) {
-      return moment(date, "MM-DD-YYYY");
-    },
-  },
+  methods: {},
 };
 </script>

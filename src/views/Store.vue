@@ -1,7 +1,7 @@
 <template>
   <div>
-    <v-container>
-      <v-row class="pb-0 pt-3 d-flex justify-center" no-gutters>
+    <v-container class="pa-5">
+      <v-row class="my-3 d-flex justify-center" no-gutters>
         <v-col cols="10" class="">
           <v-text-field
             class="grey--text text--darken-2 elevation-5 rounded-lg"
@@ -22,7 +22,7 @@
           <v-btn
             small
             color="primary"
-            class="elevation-0 rounded-lg ml-2"
+            class="elevation-5 rounded-lg ml-2"
             height="40px"
             :to="
               storeSwitcher == 'customers'
@@ -40,6 +40,7 @@
             outlined
             id="storeSwitcher"
             class="rounded-lg mx-auto pa-2"
+            background-color="white"
             width="200px"
           >
             <v-item-group
@@ -92,12 +93,13 @@
           </v-card>
         </v-col>
       </v-row>
+      <customer-list v-if="storeSwitcher == 'customers'" />
+      <supplier-list v-else />
     </v-container>
     <!-- <v-container> -->
     <!-- List of Customers & Suppliers -->
     <!-- <v-slide-x-transition> -->
-    <customer-list v-if="storeSwitcher == 'customers'" />
-    <supplier-list v-else />
+
     <!-- </v-slide-x-transition> -->
     <!-- </v-container> -->
   </div>
@@ -130,6 +132,7 @@ export default {
   display: flex;
   justify-content: center;
   text-align: center;
+  z-index: 99;
 }
 
 .v-text-field--outlined >>> fieldset {

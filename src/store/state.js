@@ -8,6 +8,11 @@ let state = {
       isLoading: false,
     },
   },
+  user: {
+    email: "rifaldikn@gmail.com",
+    id: "dawjfiwakdokak",
+    name: "Calica Store",
+  },
   products: {
     productList: [],
   },
@@ -16,28 +21,28 @@ let state = {
       totalSales: {
         label: "Total Sales",
         value: 0,
-        path: "/home",
+        path: "/",
       },
       profit: {
         label: "Profit",
         value: 0,
-        path: "/",
+        path: "/orders",
       },
       newOrders: {
         label: "New Orders",
         value: 0,
-        path: "/",
+        path: "/orders",
       },
-      products: {
-        label: "Products",
-        value: 0,
-        path: "/",
-      },
-      customers: {
-        label: "Customers",
-        value: 0,
-        path: "/",
-      },
+      // products: {
+      //   label: "Products",
+      //   value: 0,
+      //   path: "/products",
+      // },
+      // customers: {
+      //   label: "Customers",
+      //   value: 0,
+      //   path: "/store",
+      // },
     },
   },
   order: {
@@ -52,6 +57,7 @@ let state = {
       customerList: [],
     },
   },
+  sales: {},
 };
 
 export default state;

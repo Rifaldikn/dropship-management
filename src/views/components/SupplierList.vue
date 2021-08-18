@@ -1,10 +1,9 @@
 <template>
-  <v-container>
-    <v-row>
+  <div>
+    <v-row class="d-flex justify-center">
       <v-col>
         <v-card
-          outlined
-          class="pa-3 elevation-0 mb-2 rounded-lg"
+          class="pa-3 my-3 elevation-0 rounded-lg"
           v-for="(supplier, index) in allSuppliers"
           :key="index"
           :to="'/store/suppliers/' + supplier.id"
@@ -66,14 +65,14 @@
           No Supplier, Please Create One
         </v-card-title>
       </v-col>
+      <delete-modal
+        :dialog="isDeleteAction"
+        :deleteItem="selectedSupplier"
+        @cancel="cancelDelete"
+        @activeDeleteItem="deleteSupplier($event)"
+      />
     </v-row>
-    <delete-modal
-      :dialog="isDeleteAction"
-      :deleteItem="selectedSupplier"
-      @cancel="cancelDelete"
-      @activeDeleteItem="deleteSupplier($event)"
-    />
-  </v-container>
+  </div>
 </template>
 
 <script>

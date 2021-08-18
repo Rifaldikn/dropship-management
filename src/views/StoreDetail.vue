@@ -1,6 +1,6 @@
 <template>
-  <v-container>
-    <v-card class="px-5 py-5 my-5 rounded-lg" outlined>
+  <v-container class="pa-5">
+    <v-card class="px-5 py-5 my-5 rounded-lg" flat>
       <v-form :readonly="isEdited">
         <v-row>
           <v-col cols="auto" class="px-0 pb-0">
@@ -97,7 +97,7 @@
             >
             </v-text-field>
           </v-col>
-          <v-col>
+          <v-col v-if="$route.name == 'Supplier Detail'">
             <v-btn
               color="primary"
               dark
@@ -228,6 +228,9 @@ export default {
     getSupplierProducts() {
       this.bottomSheetToggle = !this.bottomSheetToggle;
     },
+    getCustomerOrders() {
+      this.bottomSheetToggle = !this.bottomSheetToggle;
+    },
     editedButton() {
       this.isSaveButton = !this.isSaveButton;
       this.isEdited = !this.isEdited;
@@ -316,7 +319,7 @@ export default {
           this.$router.push("/store");
         } else {
           this.$store.dispatch("addCustomer", customerData).then(() => {
-            this.$router.push("/products");
+            this.$router.push("/store");
           });
         }
       }

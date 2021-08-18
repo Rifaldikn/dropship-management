@@ -1,20 +1,18 @@
 <template>
-  <v-container>
+  <div>
     <v-row class="d-flex justify-center">
       <v-col>
         <v-card
           v-for="customer in allCustomers"
           :key="customer.id"
-          class="pa-3 elevation-0 mb-2 rounded-lg"
-          outlined
+          class="pa-3 my-3 rounded-lg"
+          flat
           :to="'/store/customers/' + customer.id"
           :ripple="true"
           v-my-touch:touchhold="confirmDelete(customer)"
         >
-          <v-row
-            class="px-2 flex-no-wrap justify-space-between text-capitalize"
-          >
-            <v-col cols="7" class="d-flex align-start">
+          <v-row class="flex-no-wrap justify-space-between text-capitalize">
+            <v-col cols="8" class="d-flex align-start">
               <v-row>
                 <v-col>
                   <v-card-text
@@ -31,20 +29,20 @@
                 </v-col>
               </v-row>
             </v-col>
-            <v-col cols="3" class="my-auto">
+            <v-col cols="4" class="my-auto justify-center">
               <v-row class="d-flex justify-center align-center">
                 <!-- <v-card-text class="caption pa-0 grey--text text-center">
                 Status
               </v-card-text> -->
                 <v-chip
-                  class="text-center my-1 caption font-weight-medium"
+                  class="text-center my-1 caption"
                   color="primary"
                   small
                   label
                   outlined
                   text-color="primary"
                 >
-                  {{ customer.orders.length || 0 }} Orders
+                  {{ customer.orderItems.length || 0 }} Orders
                 </v-chip>
                 <v-chip
                   class="text-center"
@@ -52,11 +50,15 @@
                   small
                   label
                   text-color="white"
+                  v-if="customer.orderItems.length > 0"
                 >
-                  Shipping
+                  {{ getLatestCustomerOrder(customer).status }}
                 </v-chip>
-                <v-card-text class="caption pa-0 grey--text text-center">
-                  21/9/2020
+                <v-card-text
+                  class="caption pa-0 grey--text text-center"
+                  v-if="customer.orderItems.length > 0"
+                >
+                  {{ getLatestCustomerOrder(customer).updatedAt | formatDate }}
                 </v-card-text>
               </v-row>
             </v-col>
@@ -80,7 +82,7 @@
         @activeDeleteItem="deleteCustomer($event)"
       />
     </v-row>
-  </v-container>
+  </div>
 </template>
 
 <script>
@@ -100,13 +102,37 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["allCustomers"]),
+    ...mapGetters(["allCustomers", "allOrders"]),
+    getLatestCustomerOrder() {
+      return (customer) => {
+        let orderStatus;
+
+        if (
+          customer.orderItems.length < 1 ||
+          customer.orderItems == undefined
+        ) {
+          orderStatus = {
+            status: false,
+            updatedAt: false,
+          };
+        } else {
+          const recentOrderId =
+            customer.orderItems[customer.orderItems.length - 1];
+          const selectedOrder = this.$store.getters.getOrderById(recentOrderId);
+
+          orderStatus = {
+            status: selectedOrder.status,
+            updatedAt: selectedOrder.updatedAt,
+          };
+        }
+
+        return orderStatus;
+      };
+    },
   },
   methods: {
     confirmDelete(customer) {
       return () => {
-        // your handler code here
-        console.log(customer);
         this.isDeleteAction = true;
         this.selectedCustomer = Object.assign({}, customer);
       };
@@ -115,7 +141,6 @@ export default {
       this.isDeleteAction = false;
     },
     deleteCustomer(value) {
-      console.log(value);
       this.isDeleteAction = false;
       this.$store.dispatch("deleteCustomer", value);
     },

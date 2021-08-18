@@ -1,6 +1,6 @@
 <template>
-  <div id="scroll-target ">
-    <v-container class="mb-10 text-capitalize">
+  <div id="scroll-target">
+    <v-container class="mb-10 pa-5 text-capitalize">
       <!-- Product Search and Add Button -->
       <v-row class="my-0">
         <v-col cols="10">
@@ -16,6 +16,7 @@
             single-line
             flat
             outlined
+            v-model="searchBar"
           >
           </v-text-field>
         </v-col>
@@ -33,23 +34,27 @@
       </v-row>
 
       <!-- Product List -->
-      <product-list :productList="productList" />
+      <product-list :searchBar="searchBar" />
     </v-container>
   </div>
 </template>
 
 <script>
 import productList from "./components/ProductList.vue";
+
 export default {
   name: "ProductsPage",
   components: { productList },
   data() {
-    return {};
+    return {
+      searchBar: "",
+    };
   },
+  computed: {},
 };
 </script>
 
-<style sc>
+<style scoped>
 #addProductButton {
   bottom: 75px;
   z-index: 99;

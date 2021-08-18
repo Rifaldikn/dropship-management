@@ -1,11 +1,17 @@
 const getters = {
+  userData: (state) => state.user,
+  isAuthenticated: (state) => (state.user.id ? true : false),
   notificationModal: (state) => state.app.notificationModal,
   dashboardData: (state) => state.home.dashboardInfo,
   allCustomers: (state) => state.store.customers.customerList,
   allProducts: (state) => state.products.productList,
   allSuppliers: (state) => state.store.supplier.supplierList,
   allOrders: (state) => state.order.orderList,
-
+  ordersByStatus: (_, getters) => (status) => {
+    return getters.allOrders.filter((order) => {
+      return order.status == status;
+    });
+  },
   getSupplierById: (_, getters) => (id) => {
     let supplierList = getters.allSuppliers;
 
@@ -41,7 +47,7 @@ const getters = {
     let customerList = getters.allCustomers;
 
     let selectedCustomer = customerList.find((customer) => customer.id == id);
-
+    console.log(customerList);
     return selectedCustomer;
   },
   productList: (state, getters) => {
@@ -55,8 +61,6 @@ const getters = {
         let selectedSupplier = supplierList.find(
           (supplier) => supplier.id == product.supplier_id
         );
-
-        // console.log(selectedSupplier);
 
         newProductList.push(
           Object.assign(

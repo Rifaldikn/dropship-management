@@ -1,13 +1,14 @@
 import Vue from "vue";
 import App from "./App.vue";
-import router from "./router";
 import store from "./store";
+import router from "./router";
 import vuetify from "./plugins/vuetify";
 import Vue2TouchEvents from "vue2-touch-events";
 import VCurrencyField from "v-currency-field";
 import { VTextField } from "vuetify/lib"; //Globally import VTextField
 
 import "./filters/filters";
+import "./registerServiceWorker";
 
 Vue.component("v-text-field", VTextField);
 
@@ -38,8 +39,8 @@ Vue.use(Vue2TouchEvents, {
 Vue.config.productionTip = false;
 
 new Vue({
-  router,
   store,
+  router,
   vuetify,
 
   render: (h) => h(App),

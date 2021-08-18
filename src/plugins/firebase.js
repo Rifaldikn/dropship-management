@@ -34,9 +34,11 @@ const auth = firebase.auth();
 
 // collection references
 const customersCollection = db.collection("customers");
-const productsCollection = db.collection("products");
 const ordersCollection = db.collection("orders");
-const suppliersCollection = db.collection("suppliers")
+const suppliersCollection = db.collection("suppliers");
+const salesCollenction = db.collection("sales");
+const usersCollenction = db.collection("users");
+const productsCollection = db.collection("products");
 
 // Get a reference to the storage service, which is used to create references in your storage bucket
 // const storage = firebasefirebase.storage().ref();.storage(
@@ -52,5 +54,7 @@ export {
   productsCollection,
   ordersCollection,
   suppliersCollection,
+  salesCollenction,
+  usersCollenction,
   storage,
 };

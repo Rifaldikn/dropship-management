@@ -17,6 +17,7 @@ export default {
     this.$store.dispatch("fetchSupplierList");
     this.$store.dispatch("fetchOrdersProduct");
     this.$store.dispatch("fetchProductListItems");
+    this.$store.dispatch("fetchSalesData");
   },
 };
 </script>
@@ -25,9 +26,6 @@ export default {
 body {
   max-width: 600px !important;
   margin: 0 auto;
-}
-#app {
-  background-color: #f9f8f7;
 }
 
 .v-text-field--outlined >>> fieldset {

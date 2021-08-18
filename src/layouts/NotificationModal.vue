@@ -28,9 +28,9 @@
           ></v-img>
         </v-col>
         <v-col cols="12" class="text-center d-flex justify-center">
-          <v-card-title class="subtitle-1" v-if="notificationModal.message">
+          <p class="subtitle-1" v-if="notificationModal.message">
             {{ notificationModal.message }}
-          </v-card-title>
+          </p>
         </v-col>
       </v-row>
     </v-card>

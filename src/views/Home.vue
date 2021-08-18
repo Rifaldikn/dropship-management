@@ -9,7 +9,7 @@
         dense
       >
         <v-row class="" no-gutters>
-          <v-col v-for="item in dashboardData" :key="item.label" cols="4">
+          <v-col v-for="(item, key) in dashboardData" :key="key" cols="4">
             <v-card
               width="100%"
               height="100%"
@@ -87,7 +87,7 @@
     <v-container class="white pb-5 mt-2">
       <v-row class="px-5 my-1">
         <div class="grey--text text--darken-3 subtitle-1 font-weight-medium">
-          Order Waiting to Be Processed
+          List Orders
         </div>
       </v-row>
       <v-row>
@@ -109,7 +109,7 @@
                   <v-list-item-title v-text="item.title"></v-list-item-title>
                 </v-list-item-content>
                 <v-list-item-action-text
-                  v-text="item.value"
+                  v-text="getOrderListCount(item.value)"
                   class="caption font-weight-bold"
                 ></v-list-item-action-text>
 
@@ -128,6 +128,9 @@ import { mapGetters } from "vuex";
 
 export default {
   name: "Home",
+  beforeMount() {
+    this.$store.dispatch("fetchDashboard");
+  },
   data() {
     return {
       dashboardMenus: [
@@ -139,48 +142,60 @@ export default {
         {
           image: "https://image.flaticon.com/icons/png/512/4371/4371334.png",
           title: "Add Order",
-          path: "/order/new",
+          path: "/orders/add",
         },
         {
           image: "https://image.flaticon.com/icons/png/512/4371/4371079.png",
           title: "List Orders",
-          path: "",
+          path: "/orders",
         },
         {
           image: "https://image.flaticon.com/icons/png/512/3787/3787823.png",
           title: "Suppliers",
-          path: "",
+          path: "/store",
         },
         {
           image: "https://image.flaticon.com/icons/png/512/726/726498.png",
           title: "My Store",
-          path: "",
+          path: "/store",
         },
       ],
       orderStatusInfo: [
         {
-          title: "Waiting approval",
-          value: 0,
-          path: "/products/status=pending",
+          title: "Waiting To Order",
+          value: "To Order",
+          path: "/orders?status=To Order",
           image: "https://image.flaticon.com/icons/png/512/2258/2258597.png",
         },
         {
-          title: "Waiting processed",
-          value: 0,
-          path: "/products/?status=processed",
+          title: "Waiting to be Packed",
+          value: "Packing",
+          path: "/orders?status=Packing",
           image: "https://image.flaticon.com/icons/png/512/4021/4021566.png",
         },
         {
           title: "Waiting to be Shipped",
-          value: 0,
-          path: "/products/?status=shipping",
+          value: "Shipping",
+          path: "/orders?status=Shipping",
           image: "https://image.flaticon.com/icons/png/512/4320/4320283.png",
+        },
+        {
+          title: "Orders Completed",
+          value: "Done",
+          path: "/orders?status=Done",
+          image: "https://image.flaticon.com/icons/png/512/391/391175.png",
         },
       ],
     };
   },
   computed: {
     ...mapGetters(["dashboardData"]),
+  },
+  methods: {
+    getOrderListCount(status) {
+      const orderList = this.$store.getters.ordersByStatus(status);
+      return orderList.length;
+    },
   },
 };
 </script>

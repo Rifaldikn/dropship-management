@@ -1,22 +1,21 @@
 <template>
-  <v-app>
-    <!-- <v-container max-width="900px"> -->
-    <div v-if="$route.meta != `fullScreen`">
-      <!-- Normal Layouts -->
+  <v-app fluid v-if="!$route.meta.fullScreen" id="mainContent">
+    <!-- Normal Layouts -->
 
-      <!-- App Bar Navigation -->
-      <app-bar-layout v-if="$route.path != `/`" />
-      <home-app-bar v-else />
+    <!-- App Bar Navigation -->
+    <app-bar-layout v-if="$route.path != `/`" />
+    <home-app-bar v-else />
 
-      <!-- Main Page layout -->
+    <!-- Main Page layout -->
 
-      <main-page-layout />
+    <main-page-layout />
 
-      <!-- Bottom Navigation -->
-      <bottom-nav-layout />
-    </div>
-    <!-- Full Screen Pages -->
-    <!-- </v-container> -->
+    <!-- Bottom Navigation -->
+    <bottom-nav-layout />
+  </v-app>
+
+  <v-app v-else>
+    <main-page-layout />
   </v-app>
 </template>
 
@@ -33,4 +32,7 @@ export default {
 </script>
 
 <style scoped>
+#mainContent {
+  background-color: #F6F8FD ;
+}
 </style>

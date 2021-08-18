@@ -2,9 +2,9 @@
   <v-main app>
     <v-container fluid class="pa-0">
       <router-view />
-    </v-container>
 
-    <notification />
+      <notification />
+    </v-container>
   </v-main>
 </template>
 
@@ -16,3 +16,9 @@ export default {
   components: { notification },
 };
 </script>
+
+<style scoped>
+.v-main {
+  height: 100%;
+}
+</style>
