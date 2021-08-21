@@ -1,15 +1,12 @@
 <template>
   <div>
-    <v-row class="my-0">
-      <v-col
-        cols="12"
-        v-for="(product, index) in filteredProducts"
-        :key="index"
-        class="pa-0"
-      >
+    <v-row class="d-flex justify-center">
+      <v-col>
         <v-card
-          class="rounded-lg px-0 my-3"
+          class="pa-3 my-3 elevation-0 rounded-lg"
           flat
+          v-for="(product, index) in filteredProducts"
+          :key="index"
           :to="'/products/' + product.id"
           v-my-touch:touchhold="confirmDelete(product)"
         >
@@ -17,7 +14,7 @@
 
           <!-- Product Information -->
           <v-row
-            class="px-3 d-flex align-center caption grey--text text--darken-2"
+            class="px-1 d-flex align-center caption grey--text text--darken-2"
             v-if="product.supplier_name"
           >
             <v-col cols="auto">
@@ -31,7 +28,7 @@
             </v-col>
 
             <v-spacer></v-spacer>
-            <v-col class="pt-5 d-flex justify-end" cols="3">
+            <v-col class="pt-0 d-flex justify-end" cols="3">
               <v-img
                 contain
                 height="20"
@@ -41,7 +38,7 @@
             </v-col>
           </v-row>
           <v-divider class="my-1" v-if="product.supplier_name"></v-divider>
-          <v-row class="px-3 py-2" no-gutters>
+          <v-row class="px-1 py-2" no-gutters>
             <!-- Proudct Image -->
             <v-col cols="2">
               <v-row class="d-flex justify-center align-center text-center">
@@ -59,7 +56,7 @@
               </v-row>
             </v-col>
             <!-- Product Name -->
-            <v-col cols="10">
+            <v-col cols="10" class="px-1">
               <v-card-title
                 class="
                   text-capitalize
@@ -78,7 +75,7 @@
 
               <!-- Product SKU -->
               <v-row class="d-flex align-center">
-                <v-col class="pr-0" cols="auto">
+                <v-col class="pr-1" cols="auto">
                   <v-card-text class="caption grey--text text--darken-1 py-0">
                     SKU: {{ product.skuId }}
                     <span class="text-uppercase">{{ product.sku_id }}</span>
@@ -87,7 +84,7 @@
                 <v-spacer></v-spacer>
                 <v-col class="d-flex align-end px-0" cols="4">
                   <v-card-text
-                    class="caption grey--text text-right text--darken-1 py-0"
+                    class="caption grey--text text-center text--darken-1 pa-0 px-1"
                   >
                     Stock ({{ product.stock == "" ? 0 : product.stock }})
                   </v-card-text>

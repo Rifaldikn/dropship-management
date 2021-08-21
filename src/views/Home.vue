@@ -1,128 +1,126 @@
 <template>
-  <div id="Home">
-    <!-- Dasboard Information -->
-
-    <v-container class="pa-5 white">
-      <v-card
-        class="elevation-1 mx-auto mt-n16 pa-1 absolute rounded-xl"
-        :ripple="false"
-        dense
-      >
-        <v-row class="" no-gutters>
-          <v-col v-for="(item, key) in dashboardData" :key="key" cols="4">
-            <v-card
-              width="100%"
-              height="100%"
-              :to="item.path"
-              class="
-                d-flex
-                justify-center
-                align-center
-                text-center
-                rounded-xl
-                elevation-0
-              "
-              :ripple="false"
-              flat
-            >
-              <div class="pa-1 primary--text">
-                <div class="title">
-                  {{ item.value }}
+  <!-- Dasboard Information -->
+  <v-container fluid fill-height>
+    <!-- <v-layout class="pa-5 white" id="Home"> -->
+    <v-row class="white d-flex justify-center">
+      <v-col cols="10">
+        <v-card
+          class="elevation-1 mx-auto mt-n13 pa-1 absolute rounded-lg"
+          :ripple="false"
+          dense
+        >
+          <v-row class="" no-gutters>
+            <v-col v-for="(item, key) in dashboardData" :key="key" cols="4">
+              <v-card
+                width="100%"
+                height="100%"
+                :to="item.path"
+                class="
+                  d-flex
+                  justify-center
+                  align-center
+                  text-center
+                  rounded-xl
+                  elevation-0
+                "
+                :ripple="false"
+                flat
+              >
+                <div class="pa-1 primary--text">
+                  <div class="title">
+                    {{ item.value }}
+                  </div>
+                  <v-list-item-subtitle class="grey--text text--darken-2">
+                    {{ item.label }}
+                  </v-list-item-subtitle>
                 </div>
-                <v-list-item-subtitle class="grey--text text--darken-2">
-                  {{ item.label }}
-                </v-list-item-subtitle>
-              </div>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-card>
-    </v-container>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-card>
+      </v-col>
+    </v-row>
+    <!-- </v-layout> -->
 
     <!-- Menus -->
 
-    <v-container fluid class="pt-0 px-7 white">
-      <v-row>
-        <v-col
-          v-for="menu in dashboardMenus"
-          :key="menu.title"
-          cols="4"
-          class="py-2"
+    <v-row class="white">
+      <v-col
+        v-for="menu in dashboardMenus"
+        :key="menu.title"
+        cols="4"
+        class="py-2"
+      >
+        <v-card
+          dense
+          class="elevation-0 rounded-xl"
+          :to="menu.path"
+          :ripple="false"
         >
-          <v-card
-            dense
-            class="elevation-0 rounded-xl"
-            :to="menu.path"
-            :ripple="false"
-          >
-            <v-responsive :aspect-ratio="1 / 1" class="d-flex align-center">
-              <v-row class="d-flex justify-center no-gutters">
-                <v-col class="py-0">
-                  <v-card
-                    class="rounded-circle pa-3 elevation-0 mx-auto"
-                    width="60px"
-                    height="60px"
-                    color="secondary"
-                    :ripple="false"
-                  >
-                    <v-img class="rounded" contain :src="menu.image"></v-img>
-                  </v-card>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col class="pt-1">
-                  <div class="caption text-center">
-                    {{ menu.title }}
-                  </div>
-                </v-col>
-              </v-row>
-            </v-responsive>
-          </v-card>
-        </v-col>
-      </v-row>
-    </v-container>
+          <v-responsive :aspect-ratio="1 / 1" class="d-flex align-center">
+            <v-row class="d-flex justify-center no-gutters">
+              <v-col class="py-0">
+                <v-card
+                  class="rounded-circle pa-3 elevation-0 mx-auto"
+                  width="60px"
+                  height="60px"
+                  color="secondary"
+                  :ripple="false"
+                >
+                  <v-img class="rounded" contain :src="menu.image"></v-img>
+                </v-card>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col class="pt-1">
+                <div class="caption text-center">
+                  {{ menu.title }}
+                </div>
+              </v-col>
+            </v-row>
+          </v-responsive>
+        </v-card>
+      </v-col>
+    </v-row>
 
     <!-- Order Status -->
 
-    <v-container class="white pb-5 mt-2">
-      <v-row class="px-5 my-1">
-        <div class="grey--text text--darken-3 subtitle-1 font-weight-medium">
+    <v-row>
+      <v-card class="mx-auto my-3" flat width="100%" c>
+        <v-card-title
+          class="grey--text text--darken-3 subtitle-1 font-weight-medium"
+        >
           List Orders
-        </div>
-      </v-row>
-      <v-row>
-        <v-card class="mx-auto rounded-lg" flat width="100%" c>
-          <v-list class="">
-            <v-list-item-group class="caption">
-              <v-list-item
-                v-for="(item, i) in orderStatusInfo"
-                :key="i"
-                :to="item.path"
-              >
-                <v-list-item-icon class="my-2">
-                  <v-img class="rounded" contain></v-img>
-                  <v-avatar size="30" color="secondary">
-                    <img class="pa-1 rounded" :src="item.image" alt="alt" />
-                  </v-avatar>
-                </v-list-item-icon>
-                <v-list-item-content class="pa-0">
-                  <v-list-item-title v-text="item.title"></v-list-item-title>
-                </v-list-item-content>
-                <v-list-item-action-text
-                  v-text="getOrderListCount(item.value)"
-                  class="caption font-weight-bold"
-                ></v-list-item-action-text>
+        </v-card-title>
+        <v-list class="">
+          <v-list-item-group class="caption">
+            <v-list-item
+              v-for="(item, i) in orderStatusInfo"
+              :key="i"
+              :to="item.path"
+            >
+              <v-list-item-icon class="my-2">
+                <v-img class="rounded" contain></v-img>
+                <v-avatar size="30" color="secondary">
+                  <img class="pa-1 rounded" :src="item.image" alt="alt" />
+                </v-avatar>
+              </v-list-item-icon>
+              <v-list-item-content class="pa-0">
+                <v-list-item-title v-text="item.title"></v-list-item-title>
+              </v-list-item-content>
+              <v-list-item-action-text
+                v-text="getOrderListCount(item.value)"
+                class="caption font-weight-bold"
+              ></v-list-item-action-text>
 
-                <v-icon> mdi-chevron-right </v-icon>
-              </v-list-item>
-            </v-list-item-group>
-          </v-list>
-        </v-card>
-      </v-row>
-    </v-container>
-  </div>
+              <v-icon> mdi-chevron-right </v-icon>
+            </v-list-item>
+          </v-list-item-group>
+        </v-list>
+      </v-card>
+    </v-row>
+  </v-container>
 </template>
-
 <script>
 import { mapGetters } from "vuex";
 

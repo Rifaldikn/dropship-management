@@ -208,24 +208,25 @@
     </v-sheet>
 
     <!-- Select Product -->
-    <v-bottom-sheet v-model="bottomSheetToggle" scrollable fullscreen>
-      <v-sheet color="#F9F8F7" class="px-1">
-        <v-col class="text-center">
-          <v-btn
-            icon
-            fab
-            text
-            small
-            color="white"
-            class="mx-4 primary"
-            @click="toggleFindProducts"
-          >
-            <v-icon>mdi-close</v-icon>
+    <v-bottom-sheet
+      v-model="bottomSheetToggle"
+      scrollable
+      fullscreen
+    >
+      <v-card color="#F9F8F7" class="px-1">
+        <v-col class="px-5 d-flex align-center py-3" style="height: '30px'">
+          <v-btn fab icon color="primary" @click="toggleFindProducts">
+            <v-icon>mdi-chevron-left</v-icon>
           </v-btn>
-
-          <product-order-list @selectedProduct="addProductToCart($event)" />
+          <v-card-text class="primary--text font-weight-medium text-capitalize">
+            Back
+          </v-card-text>
         </v-col>
-      </v-sheet>
+
+        <v-card-text style="height: 1000px">
+          <product-order-list @selectedProduct="addProductToCart($event)" />
+        </v-card-text>
+      </v-card>
     </v-bottom-sheet>
   </v-container>
 </template>

@@ -2,7 +2,12 @@ import _ from "lodash";
 
 const mutations = {
   SET_products(state, payload) {
-    state.products.productList.push(payload);
+    // state.products.productList.push(payload);
+    state.products.productList = _.unionBy(
+      state.products.productList,
+      [payload],
+      "id"
+    );
   },
 
   SET_ProductToSupplier(state, payload) {
@@ -31,10 +36,10 @@ const mutations = {
       console.log("Selected Product", products[selectedProduct]);
 
       // using lodash to update and merge nested update
-      const updatedData = (products[selectedProduct] = _.merge(
+      const updatedData = _.merge(
         products[selectedProduct],
         payload.productData
-      ));
+      );
 
       products[selectedProduct] = updatedData;
 
@@ -53,7 +58,11 @@ const mutations = {
   },
 
   SET_Suppliers(state, payload) {
-    state.store.supplier.supplierList.push(payload);
+    state.store.supplier.supplierList = _.unionBy(
+      state.store.supplier.supplierList,
+      [payload],
+      "id"
+    );
   },
 
   UPDATE_Supplier(state, payload) {
@@ -62,14 +71,23 @@ const mutations = {
     let selectedSupplier = suppliers.findIndex(
       (supplier) => supplier.id == payload.supplierId
     );
+    console.log("New Supplier Data - UPDATE_Supplier", payload.updatedData);
+    console.log("Selected Supplier - UPDATE_Supplier", selectedSupplier);
 
-    if (selectedSupplier) {
-      Object.assign(suppliers[selectedSupplier], payload.supplierData);
+    if (selectedSupplier != -1) {
+      // using lodash to update and merge nested update
+      const supplierData = _.merge(
+        suppliers[selectedSupplier],
+        payload.updatedData
+      );
+
+      console.log("Updated Supplier Data - UPDATE_Supplier", supplierData);
+      suppliers[selectedSupplier] = supplierData;
     }
   },
 
   SET_Orders(state, payload) {
-    state.order.orderList.push(payload);
+    state.order.orderList = _.unionBy(state.order.orderList, [payload], "id");
   },
 
   UPDATE_Order(state, payload) {
@@ -81,7 +99,7 @@ const mutations = {
     console.log("Selected Order - UPDATE_Order", selectedOrder);
     console.log("Update Data - UPDATE_Order", payload.productData);
 
-    if (selectedOrder) {
+    if (selectedOrder != -1) {
       const updatedOrder = _.merge(orders[selectedOrder], payload.orderData);
 
       orders[selectedOrder] = updatedOrder;
@@ -98,11 +116,15 @@ const mutations = {
   },
 
   SET_SalesData(state, payload) {
-    state.sales.orderList = payload;
+    state.sales.orderList = _.unionBy(state.sales.orderList, [payload], "id");
   },
 
   SET_Customers(state, payload) {
-    state.store.customers.customerList.push(payload);
+    state.store.customers.customerList = _.unionBy(
+      state.store.customers.customerList,
+      [payload],
+      "id"
+    );
   },
 
   UPDATE_Customer(state, payload) {
@@ -112,17 +134,24 @@ const mutations = {
       (customer) => customer.id == payload.customerId
     );
 
-    if (selectedCustomer) {
-      Object.assign(customers[selectedCustomer], payload.customerData);
+    if (selectedCustomer != -1) {
+      const customerData = (customers[selectedCustomer] = _.merge(
+        customers[selectedCustomer],
+        payload.updatedData
+      ));
+
+      customers[selectedCustomer] = customerData;
+
+      console.log("Updated Supplier Data - UPDATE_Supplier", customerData);
     }
   },
 
   SET_Notification(state, payload) {
-    Object.assign(state.app.notificationModal, payload);
+    state.app.notificationModal = _.merge(state.app.notificationModal, payload);
   },
 
   SET_User(state, payload) {
-    state.user = payload;
+    state.user = _.merge(state.user, payload);
   },
 };
 

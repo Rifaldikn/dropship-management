@@ -285,9 +285,11 @@ export default {
         productData.stock.value = selectedProducts.stock;
 
         const selectedSupplier = this.$store.getters.getSupplierById;
+
         supplierData.store.value = selectedSupplier(
           selectedProducts.supplier_id
         ).name;
+
         supplierData.price.value = selectedProducts.supplier_price;
         supplierData.link.value = selectedProducts.productLink;
 
@@ -352,7 +354,7 @@ export default {
     },
   },
   created() {
-    this.getEdited()
+    this.getEdited();
     this.getFormValue();
   },
 };

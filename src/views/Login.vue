@@ -43,6 +43,7 @@
           color="primary"
           block
           class="text-capitalize elevation-0 rounded-lg"
+          @click="loginAction"
           >Login</v-btn
         >
       </v-col>
@@ -96,6 +97,18 @@
               background-color="#F6F6F6"
               :rules="[rules.required]"
               v-model="userFormData.name"
+            ></v-text-field>
+            <v-card-text class="pa-0 primary--text"
+              >Store Location
+            </v-card-text>
+            <v-text-field
+              solo
+              required
+              filled
+              flat
+              background-color="#F6F6F6"
+              :rules="[rules.required]"
+              v-model="userFormData.location"
             ></v-text-field>
             <v-card-text class="pa-0 primary--text">Email </v-card-text>
             <v-text-field
@@ -162,6 +175,7 @@ export default {
         name: "",
         email: "",
         password: "",
+        location: "",
       },
       confirmPassword: "",
       rules: {
@@ -183,9 +197,23 @@ export default {
     },
   },
   methods: {
+    loginAction() {
+      const email = this.userFormData.email;
+      const password = this.userFormData.password;
+
+      this.$store.dispatch("signInuser", { email, password });
+
+      setTimeout(() => {
+        this.$router.push("/");
+      }, 2000);
+    },
     createNewAccountAction() {
       this.$store.dispatch("registerUser", this.userFormData);
+      this.dialog = false;
     },
+  },
+  created() {
+    window.localStorage.clear();
   },
 };
 </script>

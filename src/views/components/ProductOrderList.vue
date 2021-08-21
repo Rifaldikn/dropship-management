@@ -1,7 +1,7 @@
 <template>
   <v-item-group multiple>
     <v-container>
-      <v-row class="px-3 pt-5">
+      <!-- <v-row class="px-3 pt-5">
         <v-text-field
           solo
           label="Search Product"
@@ -12,8 +12,8 @@
           dense
           hide-details
         ></v-text-field>
-      </v-row>
-      <v-row>
+      </v-row> -->
+      <v-row style="overflow-y: auto">
         <v-col
           v-for="product in productList"
           :key="product.id"

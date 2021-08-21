@@ -1,9 +1,7 @@
 <template>
   <div>
     <!-- <v-main> -->
-    <v-fade-transition>
-      <router-view />
-    </v-fade-transition>
+    <router-view />
 
     <!-- </v-main> -->
   </div>
@@ -12,13 +10,6 @@
 <script>
 export default {
   name: "App",
-  created() {
-    this.$store.dispatch("fetchCustomerList");
-    this.$store.dispatch("fetchSupplierList");
-    this.$store.dispatch("fetchOrdersProduct");
-    this.$store.dispatch("fetchProductListItems");
-    this.$store.dispatch("fetchSalesData");
-  },
 };
 </script>
 

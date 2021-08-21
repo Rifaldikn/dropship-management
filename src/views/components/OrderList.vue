@@ -91,7 +91,7 @@ export default {
       if (this.searchBar) {
         return this.allOrders.filter((order) => {
           const searchToLowerCase = this.searchBar.toLowerCase();
-          const itemToLowerCase = order.customer.name.toLowerCase();
+          const itemToLowerCase = order.id.toLowerCase();
           return itemToLowerCase.includes(searchToLowerCase);
         });
       } else {

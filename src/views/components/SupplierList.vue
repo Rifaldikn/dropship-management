@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <v-container class="pa-0" fluid>
     <v-row class="d-flex justify-center">
       <v-col>
         <v-card
@@ -72,7 +72,7 @@
         @activeDeleteItem="deleteSupplier($event)"
       />
     </v-row>
-  </div>
+  </v-container>
 </template>
 
 <script>

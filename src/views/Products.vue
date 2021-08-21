@@ -1,15 +1,15 @@
 <template>
   <div id="scroll-target">
-    <v-container class="mb-10 pa-5 text-capitalize">
+    <v-container class="pa-5 text-capitalize">
       <!-- Product Search and Add Button -->
-      <v-row class="my-0">
+      <v-row class="my-3 d-flex justify-center" no-gutters>
         <v-col cols="10">
           <v-text-field
             class="grey--text text--darken-2 elevation-5 rounded-lg"
             background-color="#F7F7FC"
             color="primary"
             append-icon="mdi-magnify"
-            filled
+            flled
             hide-details
             dense
             solo
@@ -25,7 +25,7 @@
             small
             to="/products/add"
             color="primary"
-            class="elevation-5 rounded-lg"
+            class="elevation-5 rounded-lg ml-2"
             height="40px"
           >
             <v-icon> mdi-plus-box </v-icon>

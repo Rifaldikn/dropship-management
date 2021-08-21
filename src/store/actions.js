@@ -20,6 +20,7 @@ const actions = {
    */
 
   async registerUser({ commit }, userAccount) {
+    console.group("userAccount- registerUser", userAccount);
     await firebase
       .auth()
       .createUserWithEmailAndPassword(userAccount.email, userAccount.password)
@@ -40,6 +41,18 @@ const actions = {
           });
 
         commit("SET_User", user);
+
+        commit("SET_Notification", {
+          message: "Account Created",
+          isActive: true,
+          img: "success",
+        });
+
+        setTimeout(() => {
+          commit("SET_Notification", {
+            isActive: false,
+          });
+        }, 5000);
       })
       .catch((error) => {
         // var errorCode = error.code;
@@ -61,14 +74,14 @@ const actions = {
       });
   },
 
-  async signInuser({ commit }, userAccount) {
+  async signInuser({ dispatch }, { email, password }) {
     await firebase
       .auth()
-      .signInWithEmailAndPassword(userAccount.email, userAccount.password)
+      .signInWithEmailAndPassword(email, password)
       .then((userCredential) => {
-        var user = userCredential.user;
-
-        commit("SET_User", user);
+        var userId = userCredential.user.uid;
+        console.log("userId - signInuser", userId);
+        dispatch("fetchUserData", userId);
       })
       .catch((error) => {
         var errorCode = error.code;
@@ -78,6 +91,80 @@ const actions = {
           errorMessage,
         });
       });
+  },
+
+  async fetchUserData({ commit }, userId) {
+    await usersCollenction
+      .doc(userId)
+      .get()
+      .then((doc) => {
+        if (!doc.exists) {
+          console.log("No such document!");
+        } else {
+          commit("SET_User", doc.data());
+
+          console.log("Document data:", doc.data());
+        }
+      });
+  },
+
+  async addUserProfilePicture({ dispatch, commit }, { userId, imgData }) {
+    console.log("addUserProfilePicture - imgData", imgData);
+
+    if (imgData) {
+      let isUploaded = await dispatch("uploadImageBlob", imgData);
+
+      console.log("addUserProfilePicture - isUploaded", isUploaded);
+
+      if (isUploaded) {
+        dispatch("updateUserData", {
+          userId,
+          userData: {
+            imgURL: isUploaded,
+          },
+        });
+
+        commit("SET_User", { imgURL: isUploaded });
+
+        commit("SET_Notification", {
+          message: "Image Uploaded",
+          isActive: true,
+          isLoading: false,
+          img: "success",
+        });
+
+        setTimeout(() => {
+          commit("SET_Notification", {
+            isActive: false,
+          });
+        }, 2000);
+      } else {
+        commit("SET_User", { imgURL: "" });
+      }
+    }
+  },
+
+  async updateUserData({ commit }, { userId, userData }) {
+    console.log("updateUserData - userId", userId);
+
+    console.log("updateUserData - userData", userData);
+
+    await usersCollenction.doc(userId).set(userData, { merge: true });
+
+    commit("SET_User", userData);
+
+    commit("SET_Notification", {
+      message: "Store link is successfully Added",
+      isActive: true,
+      isLoading: false,
+      img: "success",
+    });
+
+    setTimeout(() => {
+      commit("SET_Notification", {
+        isActive: false,
+      });
+    }, 2000);
   },
 
   /**
@@ -252,6 +339,8 @@ const actions = {
       customer: {
         id: orderForm.customer.value.id,
         name: orderForm.customer.value.name,
+        address: orderForm.customer.value.address,
+        phone: orderForm.customer.value.phone,
       },
       delivery: {
         courierDelivery: "",
@@ -294,7 +383,11 @@ const actions = {
     await ordersCollection
       .doc(orderId)
       .set(orderData)
-      .then(() => {});
+      .then((docRef) => {
+        orderData.id = docRef.id;
+
+        commit("SET_Orders", orderId);
+      });
 
     // Update customer order list
     await customersCollection
@@ -303,14 +396,13 @@ const actions = {
         orderItems: firebase.firestore.FieldValue.arrayUnion(orderId),
       })
       .then(() => {
-        commit("SET_OrderToCustomer", { orderId });
+        commit("SET_OrderToCustomer", orderId);
       })
       .catch((error) => {
         console.error("Error adding document: ", error);
       });
 
     // Add new order to vuex state
-    commit("SET_Orders", orderData);
 
     commit("SET_Notification", {
       message: "Order is successfully Saved",
@@ -329,9 +421,9 @@ const actions = {
     const userId = getters.userData.id;
 
     await ordersCollection
+      .where("userId", "==", userId)
       .get()
-      .where("userId", "==", userId)
-      .where("userId", "==", userId)
+
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           const order = doc.data();
@@ -376,6 +468,19 @@ const actions = {
 
         productData.id = docRef.id;
         commit("SET_products", productData);
+
+        commit("SET_Notification", {
+          message: "Product is Successfully Added",
+          isActive: true,
+          isLoading: false,
+          img: "success",
+        });
+
+        setTimeout(() => {
+          commit("SET_Notification", {
+            isActive: false,
+          });
+        }, 2000);
       })
       .catch((error) => {
         console.error("Error adding document: ", error);
@@ -398,8 +503,8 @@ const actions = {
     const userId = getters.userData.id;
 
     await productsCollection
-      .get()
       .where("userId", "==", userId)
+      .get()
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           const product = doc.data();
@@ -479,8 +584,9 @@ const actions = {
     await suppliersCollection
       .add(supplierData)
       .then((docRef) => {
+        supplierData.id = docRef.id;
+        console.log("docRef.id - addSupplier", docRef.id);
         commit("SET_Suppliers", supplierData);
-        console.log("GET_products", "Document written with ID: ", docRef.id);
       })
       .catch((error) => {
         console.error("Error adding document: ", error);
@@ -498,6 +604,7 @@ const actions = {
       .add(customerData)
       .then((docRef) => {
         console.log("GET_products", "Document written with ID: ", docRef.id);
+        customerData.id = docRef.id;
         commit("SET_Customers", customerData);
       })
       .catch((error) => {
@@ -510,7 +617,10 @@ const actions = {
       .doc(customerId)
       .set(updatedData, { merge: true })
       .then(() => {
-        commit("UPDATE_Customer", { customerId, customerData: updatedData });
+        commit("UPDATE_Customer", { customerId, updatedData });
+      })
+      .catch((error) => {
+        console.error("Error removing document: ", error);
       });
   },
 
@@ -540,8 +650,8 @@ const actions = {
   async fetchCustomerList({ commit, getters }) {
     const userId = getters.userData.id;
     await customersCollection
-      .get()
       .where("userId", "==", userId)
+      .get()
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           const customer = doc.data();
@@ -553,13 +663,14 @@ const actions = {
   },
 
   async updateSupplierById({ commit }, { supplierId, updatedData }) {
-    // console.log(supplierId);
-    // console.log("updated data", updatedData);
     await suppliersCollection
       .doc(supplierId)
       .set(updatedData, { merge: true })
       .then(() => {
-        commit("UPDATE_Supplier", { supplierData: updatedData, supplierId });
+        commit("UPDATE_Supplier", { updatedData, supplierId });
+      })
+      .catch((error) => {
+        console.error("Error removing document: ", error);
       });
   },
 
@@ -567,8 +678,8 @@ const actions = {
     const userId = getters.userData.id;
 
     await suppliersCollection
-      .get()
       .where("userId", "==", userId)
+      .get()
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           const supplier = doc.data();
@@ -618,12 +729,6 @@ const actions = {
         console.error("Error removing document: ", error);
       });
   },
-
-  /**
-   *
-   * Sales Actions
-   *
-   */
 };
 
 export default actions;

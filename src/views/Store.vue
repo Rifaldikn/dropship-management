@@ -126,7 +126,6 @@ export default {
 
 <style scoped>
 #storeSwitcher {
-  border-color: #5a63dc;
   position: fixed;
   bottom: 75px;
   display: flex;
