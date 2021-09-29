@@ -10,6 +10,15 @@
 <script>
 export default {
   name: "App",
+  created() {
+    if (this.$store.getters.userData) {
+      this.$store.dispatch("fetchCustomerList");
+      this.$store.dispatch("fetchSupplierList");
+      this.$store.dispatch("fetchOrdersProduct");
+      this.$store.dispatch("fetchProductListItems");
+      this.$store.dispatch("fetchSalesData");
+    }
+  },
 };
 </script>
 
@@ -24,11 +33,11 @@ body {
 }
 
 * {
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
+  -webkit-touch-callout: none !important;
+  -webkit-user-select: none !important;
+  -khtml-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
   user-select: none;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }

@@ -3,10 +3,11 @@ node_modules
 /dist
 /android
 
-
 # local env files
 .env.local
 .env.*.local
+.firebase
+
 
 # Log files
 npm-debug.log*

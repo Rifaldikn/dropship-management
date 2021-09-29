@@ -2,7 +2,6 @@ import _ from "lodash";
 
 const mutations = {
   SET_products(state, payload) {
-    // state.products.productList.push(payload);
     state.products.productList = _.unionBy(
       state.products.productList,
       [payload],
@@ -35,7 +34,6 @@ const mutations = {
       console.log("Updated Product : ", payload.productData);
       console.log("Selected Product", products[selectedProduct]);
 
-      // using lodash to update and merge nested update
       const updatedData = _.merge(
         products[selectedProduct],
         payload.productData
@@ -75,7 +73,6 @@ const mutations = {
     console.log("Selected Supplier - UPDATE_Supplier", selectedSupplier);
 
     if (selectedSupplier != -1) {
-      // using lodash to update and merge nested update
       const supplierData = _.merge(
         suppliers[selectedSupplier],
         payload.updatedData
@@ -109,10 +106,7 @@ const mutations = {
   },
 
   SET_DashboardData(state) {
-    // state.home.dashboardInfo.products.value = state.products.productList.length;
     state.home.dashboardInfo.totalSales.value = state.order.orderList.length;
-    // state.home.dashboardInfo.newOrders = this.
-    // state.home.dashboardInfo.customers.value = state.store.customers.customerList.length;
   },
 
   SET_SalesData(state, payload) {

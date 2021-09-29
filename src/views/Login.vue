@@ -212,8 +212,5 @@ export default {
       this.dialog = false;
     },
   },
-  created() {
-    window.localStorage.clear();
-  },
 };
 </script>

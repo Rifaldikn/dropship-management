@@ -9,12 +9,6 @@ let state = {
     },
   },
   user: {
-    // email: "rifaldikn@gmail.com",
-    // id: "dawjfiwakdokak",
-    // name: "Calica Store",
-    // location: "Serang",
-    // storeLink: "shopee.cm",
-    // imgURL: "",
     email: "",
     id: "",
     name: "",
@@ -42,16 +36,6 @@ let state = {
         value: 0,
         path: "/orders",
       },
-      // products: {
-      //   label: "Products",
-      //   value: 0,
-      //   path: "/products",
-      // },
-      // customers: {
-      //   label: "Customers",
-      //   value: 0,
-      //   path: "/store",
-      // },
     },
   },
   order: {

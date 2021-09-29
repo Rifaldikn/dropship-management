@@ -91,6 +91,12 @@ const actions = {
           errorMessage,
         });
       });
+
+    this.$store.dispatch("fetchCustomerList");
+    this.$store.dispatch("fetchSupplierList");
+    this.$store.dispatch("fetchOrdersProduct");
+    this.$store.dispatch("fetchProductListItems");
+    this.$store.dispatch("fetchSalesData");
   },
 
   async fetchUserData({ commit }, userId) {
